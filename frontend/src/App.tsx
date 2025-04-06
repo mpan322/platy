@@ -1,12 +1,11 @@
-import { Button } from './components/ui/button';
+import { Route, Routes } from 'react-router-dom';
+import { Auth } from './pages/auth/auth';
 
 function App() {
   return (
-    <div>
-      <Button variant="destructive">
-        Hello
-      </Button>
-    </div>
+    <Routes>
+      <Route path="/" element={<Auth />} />
+    </Routes>
   );
 }
 
