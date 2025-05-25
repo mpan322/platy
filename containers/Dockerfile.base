@@ -1,0 +1,14 @@
+FROM nixos/nix:latest
+
+# enable flakes and nix-command
+RUN echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
+RUN nix profile install nixpkgs#home-manager
+RUN home-manager --version
+
+COPY ./containers/home.nix /home/.config/home-manager/home.nix
+WORKDIR /home
+COPY . ./platy
+
+# set PATH to include nix profile & home to be properly set
+ENV PATH="/home/.nix-profile/bin:$PATH"
+ENV HOME="/home"
