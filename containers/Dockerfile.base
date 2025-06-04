@@ -1,14 +1,10 @@
-FROM nixos/nix:latest
+FROM alpine:latest
+RUN apk update && apk add alpine-sdk neovim git ripgrep nodejs npm openssh zsh shadow curl tmux go
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-# enable flakes and nix-command
-RUN echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
-RUN nix profile install nixpkgs#home-manager
-RUN home-manager --version
+WORKDIR /root
+RUN mkdir .config/
 
-COPY ./containers/home.nix /home/.config/home-manager/home.nix
-WORKDIR /home
+RUN chsh -s $(which zsh)
+COPY ./containers/.zshrc ./.zshrc
 COPY . ./platy
-
-# set PATH to include nix profile & home to be properly set
-ENV PATH="/home/.nix-profile/bin:$PATH"
-ENV HOME="/home"
